@@ -1,0 +1,40 @@
+## /home/noureddine/codes/cubit/bin/cubitx
+## Cubit Version 13.2
+## Cubit Build 47708
+## Revised 2012-03-14 14:51:57 -0600 (Wed, 14 Mar 2012)
+## Running 02/08/2023 03:12:21 PM
+## Command Options:
+## -warning = On
+## -information = On
+brick x 10000 y 8000 z 30000
+volume 1 move 5000 4000 -15000
+webcut volume 1 with zplane offset -2500
+webcut volume 2 with zplane offset -6000
+webcut volume 2 3 with zplane offset -2500 rotate 13 about y offset center 5000 5000 -2500
+webcut volume 3 with zplane offset -6000 rotate 13 about y offset center 5000 5000 -6000
+group "surf_all" add surface all
+find surface overlap volume all
+group "surf_free" add surface 1
+group "surf_parax" subtract group 4 from group 2
+group "surf_parax" subtract group 3 from group 5
+imprint all
+merge all
+volume 5 size 300
+mesh volume 5
+refine surface 44 37 numsplit 1 depth 0
+volume 3 4 size 100
+mesh volume 3 4
+volume 1 2 size 100
+mesh volume 1 2
+compress ids all
+block 1 volume 1 2
+block 1 name "l01"
+block 2 volume 3 4
+block 2 name "l02"
+block 3 volume 5
+block 3 name "l03"
+block 4 surf_parax
+block 4 name "prx"
+block 5 surf_free
+block 5 name "fsu"
+export mesh "./Barrage.ex2" block all dimension 3 overwrite
